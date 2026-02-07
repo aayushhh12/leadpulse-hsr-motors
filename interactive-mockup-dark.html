@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeadPulse – Interactive Dark Mockup</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #0a0a0a; color: #e4e4e7; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+    .app { max-width: 1280px; margin: 0 auto; padding: 24px; }
+
+    /* Header */
+    .header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: #0a0a0a; border-bottom: 1px solid #27272a; margin: -24px -24px 24px -24px; padding-left: 24px; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+    .nav { display: flex; gap: 8px; }
+    .nav a { padding: 10px 18px; border-radius: 8px; color: #a1a1aa; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+    .nav a:hover { color: #fff; background: #27272a; }
+    .nav a.active { color: #fff; background: #3b82f6; }
+    .nav a.active:hover { background: #2563eb; }
+
+    /* Tabs to switch screens */
+    .screen-tabs { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
+    .screen-tabs button { padding: 10px 16px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; color: #a1a1aa; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+    .screen-tabs button:hover { background: #27272a; color: #fff; }
+    .screen-tabs button.active { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+    .screen { display: none; }
+    .screen.visible { display: block; }
+
+    /* Panels */
+    .panel { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 20px; margin-bottom: 16px; transition: box-shadow 0.2s; }
+    .panel:hover { box-shadow: 0 0 0 1px #3f3f46; }
+    .panel.interactive:hover { box-shadow: 0 0 0 2px #3b82f6; }
+
+    /* Stats */
+    .stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+    .stat-card { background: #18181b; border: 1px solid #27272a; border-radius: 10px; padding: 20px; min-width: 140px; transition: all 0.2s; cursor: default; }
+    .stat-card:hover { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); }
+    .stat-card .label { font-size: 0.8rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .stat-card .value { font-size: 1.75rem; font-weight: 700; color: #fff; }
+
+    /* Table */
+    .toolbar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .search { flex: 1; min-width: 200px; padding: 10px 14px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-size: 0.9rem; transition: border-color 0.2s; }
+    .search:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); }
+    .dropdown { position: relative; }
+    .dropdown-btn { padding: 10px 14px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; display: flex; align-items: center; gap: 8px; min-width: 120px; transition: all 0.2s; }
+    .dropdown-btn:hover { background: #27272a; border-color: #3f3f46; }
+    .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; margin-top: 4px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 6px; min-width: 160px; z-index: 10; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    .dropdown.open .dropdown-menu { display: block; }
+    .dropdown.open .dropdown-btn { border-color: #3b82f6; }
+    .dropdown-menu span { display: block; padding: 10px 12px; border-radius: 6px; cursor: pointer; transition: background 0.15s; }
+    .dropdown-menu span:hover { background: #27272a; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 12px 16px; font-size: 0.75rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #27272a; }
+    td { padding: 14px 16px; border-bottom: 1px solid #27272a; transition: background 0.15s; }
+    tr:hover td { background: #27272a; }
+    tr.hover td { background: #1e3a5f; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+    .badge-new { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+    .badge-contacted { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+    .badge-qualified { background: rgba(168, 85, 247, 0.2); color: #a855f7; }
+    .badge-not { background: rgba(113, 113, 122, 0.3); color: #a1a1aa; }
+    .actions { display: flex; gap: 8px; }
+    .actions button { width: 36px; height: 36px; border-radius: 8px; border: none; background: transparent; color: #71717a; cursor: pointer; transition: all 0.2s; }
+    .actions button:hover { background: #27272a; color: #3b82f6; }
+    .pagination { display: flex; align-items: center; gap: 8px; margin-top: 16px; }
+    .pagination button { padding: 8px 14px; border-radius: 6px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; transition: all 0.2s; }
+    .pagination button:hover { background: #27272a; }
+    .pagination button.active { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+
+    /* Lead Details */
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    @media (max-width: 768px) { .detail-grid { grid-template-columns: 1fr; } }
+    .contact-card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px; }
+    .contact-card h3 { margin: 0 0 16px 0; font-size: 1.1rem; color: #fff; }
+    .contact-card p { margin: 0 0 10px 0; color: #a1a1aa; font-size: 0.9rem; }
+    .contact-card p strong { color: #e4e4e7; }
+    .timeline { position: relative; padding-left: 24px; border-left: 2px solid #27272a; margin-left: 8px; }
+    .timeline-item { position: relative; padding-bottom: 20px; }
+    .timeline-item::before { content: ''; position: absolute; left: -30px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 12px #3b82f6; }
+    .timeline-item:hover::before { box-shadow: 0 0 16px #3b82f6; transform: scale(1.2); }
+    .timeline-item .date { font-size: 0.75rem; color: #71717a; margin-bottom: 2px; }
+    .timeline-item .text { color: #e4e4e7; font-size: 0.9rem; }
+    .status-select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-size: 0.95rem; cursor: pointer; margin-bottom: 16px; transition: border-color 0.2s; }
+    .status-select:hover, .status-select:focus { border-color: #3b82f6; outline: none; }
+    textarea { width: 100%; min-height: 80px; padding: 12px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-family: inherit; resize: vertical; transition: border-color 0.2s; }
+    textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+    .btn { padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-size: 0.9rem; }
+    .btn-primary { background: #3b82f6; color: #fff; }
+    .btn-primary:hover { background: #2563eb; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+    .btn-secondary { background: #27272a; color: #e4e4e7; }
+    .btn-secondary:hover { background: #3f3f46; }
+    .quick-actions { display: flex; gap: 12px; margin-top: 16px; }
+    .quick-actions button { padding: 10px 16px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+    .quick-actions button:hover { border-color: #3b82f6; color: #3b82f6; }
+
+    /* Kanban */
+    .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    @media (max-width: 900px) { .kanban { grid-template-columns: repeat(2, 1fr); } }
+    .kanban-col { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; min-height: 400px; }
+    .kanban-col:hover { border-color: #3f3f46; }
+    .kanban-col h4 { margin: 0 0 12px 0; font-size: 0.9rem; color: #71717a; display: flex; justify-content: space-between; }
+    .kanban-col h4 span { background: #27272a; padding: 2px 8px; border-radius: 6px; color: #e4e4e7; font-size: 0.8rem; }
+    .kanban-card { background: #0a0a0a; border: 1px solid #27272a; border-radius: 10px; padding: 14px; margin-bottom: 10px; cursor: grab; transition: all 0.2s; }
+    .kanban-card:hover { border-color: #3b82f6; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2); transform: translateY(-1px); }
+    .kanban-card:active { cursor: grabbing; }
+    .kanban-card .name { font-weight: 600; color: #fff; margin-bottom: 4px; }
+    .kanban-card .meta { font-size: 0.8rem; color: #71717a; }
+    .automation { margin-top: 24px; }
+    .automation h4 { margin-bottom: 12px; color: #e4e4e7; font-size: 0.95rem; }
+    .automation-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; margin-bottom: 8px; transition: all 0.2s; }
+    .automation-item:hover { border-color: #22c55e; }
+    .toggle { width: 44px; height: 24px; border-radius: 12px; background: #27272a; position: relative; cursor: pointer; transition: background 0.2s; }
+    .toggle.on { background: #22c55e; }
+    .toggle::after { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: transform 0.2s; }
+    .toggle.on::after { transform: translateX(20px); }
+
+    /* Dashboard */
+    .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+    @media (max-width: 768px) { .chart-row { grid-template-columns: 1fr; } }
+    .chart-box { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px; height: 280px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .chart-box:hover { border-color: #3b82f6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.1); }
+    .chart-placeholder { color: #71717a; font-size: 0.9rem; }
+    .date-filter { padding: 10px 14px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; transition: all 0.2s; }
+    .date-filter:hover { border-color: #3b82f6; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <span class="logo">LeadPulse</span>
+      <nav class="nav">
+        <a href="#" class="active">Leads</a>
+        <a href="#">Dashboard</a>
+      </nav>
+    </header>
+
+    <div class="screen-tabs">
+      <button type="button" class="active" data-screen="listing">1. Lead Listing</button>
+      <button type="button" data-screen="details">2. Lead Details</button>
+      <button type="button" data-screen="management">3. Lead Management</button>
+      <button type="button" data-screen="dashboard">4. Dashboard</button>
+    </div>
+
+    <!-- Screen 1: Lead Listing -->
+    <section id="listing" class="screen visible">
+      <div class="stats">
+        <div class="stat-card"><div class="label">Total Leads</div><div class="value">247</div></div>
+        <div class="stat-card"><div class="label">New</div><div class="value">23</div></div>
+        <div class="stat-card"><div class="label">Contacted</div><div class="value">156</div></div>
+      </div>
+      <div class="panel">
+        <div class="toolbar">
+          <input type="text" class="search" placeholder="Search leads..." />
+          <div class="dropdown" id="sourceDropdown">
+            <button type="button" class="dropdown-btn">Source ▾</button>
+            <div class="dropdown-menu">
+              <span>Facebook</span><span>Google</span><span>Website</span><span>Twitter</span>
+            </div>
+          </div>
+          <div class="dropdown" id="statusDropdown">
+            <button type="button" class="dropdown-btn">Status ▾</button>
+            <div class="dropdown-menu">
+              <span>New</span><span>Contacted</span><span>Qualified</span><span>Not Interested</span>
+            </div>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Lead Name</th><th>Phone</th><th>Source</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            <tr class="hover"><td>Rohan Verma</td><td>+91 98765 43210</td><td>Facebook</td><td><span class="badge badge-new">New</span></td><td>16/07/2025</td><td><div class="actions"><button title="Email">✉</button><button title="Edit">✎</button><button title="Delete">🗑</button></div></td></tr>
+            <tr><td>Ananya Iyer</td><td>+91 87654 32109</td><td>Google</td><td><span class="badge badge-contacted">Contacted</span></td><td>15/07/2025</td><td><div class="actions"><button title="Email">✉</button><button title="Edit">✎</button><button title="Delete">🗑</button></div></td></tr>
+            <tr><td>Arjun Mehta</td><td>+91 76543 21098</td><td>Website</td><td><span class="badge badge-qualified">Qualified</span></td><td>14/07/2025</td><td><div class="actions"><button title="Email">✉</button><button title="Edit">✎</button><button title="Delete">🗑</button></div></td></tr>
+            <tr><td>Kavitha Reddy</td><td>+91 65432 10987</td><td>Facebook</td><td><span class="badge badge-not">Not Interested</span></td><td>13/07/2025</td><td><div class="actions"><button title="Email">✉</button><button title="Edit">✎</button><button title="Delete">🗑</button></div></td></tr>
+          </tbody>
+        </table>
+        <div class="pagination">
+          <button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button>
+          <span style="margin-left:12px;color:#71717a;font-size:0.9rem">Page 1 of 10</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen 2: Lead Details -->
+    <section id="details" class="screen">
+      <div class="panel" style="margin-bottom:16px"><a href="#" style="color:#3b82f6;text-decoration:none">← Back to leads</a></div>
+      <div class="detail-grid">
+        <div class="contact-card panel">
+          <h3>Rajesh Kumar</h3>
+          <p><strong>Phone:</strong> +91 98765 43210</p>
+          <p><strong>Email:</strong> rajesh@email.com</p>
+          <p><strong>Source:</strong> Facebook Ads</p>
+          <p><strong>Date:</strong> 5 Nov 2025</p>
+          <div class="quick-actions">
+            <button>📞 Call</button><button>✉ Email</button><button>WhatsApp</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h4 style="margin:0 0 16px 0;color:#fff">Activity</h4>
+          <div class="timeline">
+            <div class="timeline-item"><div class="date">6 Nov 2025</div><div class="text">Contacted – Initial call made</div></div>
+            <div class="timeline-item"><div class="date">7 Nov 2025</div><div class="text">Status updated to Qualified</div></div>
+            <div class="timeline-item"><div class="date">7 Nov 2025</div><div class="text">Follow-up scheduled</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <label style="display:block;margin-bottom:8px;color:#a1a1aa">Status</label>
+        <select class="status-select">
+          <option>New</option><option>Contacted</option><option selected>Qualified</option><option>Not Interested</option>
+        </select>
+        <label style="display:block;margin-bottom:8px;color:#a1a1aa">Notes</label>
+        <textarea placeholder="Add notes..."></textarea>
+        <div style="display:flex;gap:12px;margin-top:16px">
+          <button class="btn btn-primary">Save</button>
+          <button class="btn btn-secondary">Schedule Call</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screen 3: Lead Management -->
+    <section id="management" class="screen">
+      <div class="toolbar" style="margin-bottom:20px">
+        <button class="btn btn-primary">+ Add Lead</button>
+        <div class="dropdown"><button type="button" class="dropdown-btn">Bulk Actions ▾</button><div class="dropdown-menu"><span>Assign</span><span>Export</span></div></div>
+        <div class="dropdown"><button type="button" class="dropdown-btn">Filter by source ▾</button><div class="dropdown-menu"><span>All</span><span>Facebook</span><span>Google</span><span>Website</span></div></div>
+      </div>
+      <div class="kanban">
+        <div class="kanban-col"><h4>New <span>12</span></h4>
+          <div class="kanban-card"><div class="name">Amit Sharma</div><div class="meta">+91 98765 11111 · Google · 8 Feb 2025</div></div>
+          <div class="kanban-card"><div class="name">Priya Nair</div><div class="meta">+91 98765 22222 · Website · 8 Feb 2025</div></div>
+        </div>
+        <div class="kanban-col"><h4>Contacted <span>8</span></h4>
+          <div class="kanban-card"><div class="name">Rajesh Kumar</div><div class="meta">+91 98765 43210 · Facebook · 6 Jan 2025</div></div>
+          <div class="kanban-card"><div class="name">Sneha Reddy</div><div class="meta">+91 98765 33333 · Google · 5 Jan 2025</div></div>
+        </div>
+        <div class="kanban-col"><h4>Qualified <span>5</span></h4>
+          <div class="kanban-card"><div class="name">Vikram Singh</div><div class="meta">+91 98765 44444 · Website · 4 Jan 2025</div></div>
+        </div>
+        <div class="kanban-col"><h4>Not Interested <span>3</span></h4>
+          <div class="kanban-card"><div class="name">Kiran Patel</div><div class="meta">+91 98765 55555 · Facebook · 3 Jan 2025</div></div>
+        </div>
+      </div>
+      <div class="automation">
+        <h4>Automation</h4>
+        <div class="automation-item"><span>Auto-assign new leads to available agents</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="automation-item"><span>Reminder: Uncontacted leads after 24hrs</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        <div class="automation-item"><span>Daily digest email</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+      </div>
+    </section>
+
+    <!-- Screen 4: Dashboard -->
+    <section id="dashboard" class="screen">
+      <div class="toolbar" style="margin-bottom:20px">
+        <select class="date-filter"><option>Last 7 days</option><option>Last 30 days</option><option selected>Last 90 days</option></select>
+      </div>
+      <div class="stats">
+        <div class="stat-card"><div class="label">Total Leads</div><div class="value">1,247</div></div>
+        <div class="stat-card"><div class="label">New This Week</div><div class="value">89</div></div>
+        <div class="stat-card"><div class="label">Conversion Rate</div><div class="value">23%</div></div>
+        <div class="stat-card"><div class="label">Avg Response Time</div><div class="value">2.4 hrs</div></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-box"><span class="chart-placeholder">📈 Leads Over Time (line chart)</span></div>
+        <div class="chart-box"><span class="chart-placeholder">🍩 Leads by Source (donut)</span></div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-box"><span class="chart-placeholder">📊 Leads by Status (bar chart)</span></div>
+        <div class="chart-box"><span class="chart-placeholder">📅 Top sources trend</span></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    document.querySelectorAll('.screen-tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.screen-tabs button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.screen).classList.add('visible');
+      });
+    });
+    document.querySelectorAll('.dropdown').forEach(el => {
+      el.querySelector('button').addEventListener('click', () => el.classList.toggle('open'));
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.dropdown')) document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
+    });
+    document.querySelectorAll('tbody tr').forEach(row => {
+      row.addEventListener('mouseenter', () => { document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('hover')); row.classList.add('hover'); });
+      row.addEventListener('mouseleave', () => row.classList.remove('hover'));
+    });
+  </script>
+</body>
+</html>
