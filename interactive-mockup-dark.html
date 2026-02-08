@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LeadPulse – Interactive Dark Mockup</title>
+  <title>LeadPulse – Lead Management</title>
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; background: #0a0a0a; color: #e4e4e7; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
@@ -16,9 +16,8 @@
     .nav a { padding: 10px 18px; border-radius: 8px; color: #a1a1aa; text-decoration: none; font-weight: 500; transition: all 0.2s; }
     .nav a:hover { color: #fff; background: #27272a; }
     .nav a.active { color: #fff; background: #3b82f6; }
-    .nav a.active:hover { background: #2563eb; }
 
-    /* Tabs to switch screens */
+    /* Screen tabs */
     .screen-tabs { display: flex; gap: 4px; margin-bottom: 24px; flex-wrap: wrap; }
     .screen-tabs button { padding: 10px 16px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; color: #a1a1aa; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
     .screen-tabs button:hover { background: #27272a; color: #fff; }
@@ -27,34 +26,21 @@
     .screen.visible { display: block; }
 
     /* Panels */
-    .panel { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 20px; margin-bottom: 16px; transition: box-shadow 0.2s; }
-    .panel:hover { box-shadow: 0 0 0 1px #3f3f46; }
-    .panel.interactive:hover { box-shadow: 0 0 0 2px #3b82f6; }
-
-    /* Stats */
+    .panel { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
     .stats { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
-    .stat-card { background: #18181b; border: 1px solid #27272a; border-radius: 10px; padding: 20px; min-width: 140px; transition: all 0.2s; cursor: default; }
-    .stat-card:hover { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); }
+    .stat-card { background: #18181b; border: 1px solid #27272a; border-radius: 10px; padding: 20px; min-width: 140px; }
     .stat-card .label { font-size: 0.8rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
     .stat-card .value { font-size: 1.75rem; font-weight: 700; color: #fff; }
 
     /* Table */
     .toolbar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
-    .search { flex: 1; min-width: 200px; padding: 10px 14px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-size: 0.9rem; transition: border-color 0.2s; }
-    .search:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); }
-    .dropdown { position: relative; }
-    .dropdown-btn { padding: 10px 14px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; display: flex; align-items: center; gap: 8px; min-width: 120px; transition: all 0.2s; }
-    .dropdown-btn:hover { background: #27272a; border-color: #3f3f46; }
-    .dropdown-menu { display: none; position: absolute; top: 100%; left: 0; margin-top: 4px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; padding: 6px; min-width: 160px; z-index: 10; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-    .dropdown.open .dropdown-menu { display: block; }
-    .dropdown.open .dropdown-btn { border-color: #3b82f6; }
-    .dropdown-menu span { display: block; padding: 10px 12px; border-radius: 6px; cursor: pointer; transition: background 0.15s; }
-    .dropdown-menu span:hover { background: #27272a; }
+    .search { flex: 1; min-width: 200px; padding: 10px 14px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-size: 0.9rem; }
+    .search:focus { outline: none; border-color: #3b82f6; }
     table { width: 100%; border-collapse: collapse; }
     th { text-align: left; padding: 12px 16px; font-size: 0.75rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid #27272a; }
-    td { padding: 14px 16px; border-bottom: 1px solid #27272a; transition: background 0.15s; }
+    td { padding: 14px 16px; border-bottom: 1px solid #27272a; }
+    tr { cursor: pointer; transition: background 0.15s; }
     tr:hover td { background: #27272a; }
-    tr.hover td { background: #1e3a5f; }
     .badge { display: inline-block; padding: 4px 10px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
     .badge-new { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
     .badge-contacted { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
@@ -63,10 +49,12 @@
     .actions { display: flex; gap: 8px; }
     .actions button { width: 36px; height: 36px; border-radius: 8px; border: none; background: transparent; color: #71717a; cursor: pointer; transition: all 0.2s; }
     .actions button:hover { background: #27272a; color: #3b82f6; }
+    .actions button.delete:hover { color: #ef4444; }
     .pagination { display: flex; align-items: center; gap: 8px; margin-top: 16px; }
-    .pagination button { padding: 8px 14px; border-radius: 6px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; transition: all 0.2s; }
+    .pagination button { padding: 8px 14px; border-radius: 6px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; }
     .pagination button:hover { background: #27272a; }
     .pagination button.active { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+    .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
 
     /* Lead Details */
     .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -77,39 +65,38 @@
     .contact-card p strong { color: #e4e4e7; }
     .timeline { position: relative; padding-left: 24px; border-left: 2px solid #27272a; margin-left: 8px; }
     .timeline-item { position: relative; padding-bottom: 20px; }
-    .timeline-item::before { content: ''; position: absolute; left: -30px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; box-shadow: 0 0 12px #3b82f6; }
-    .timeline-item:hover::before { box-shadow: 0 0 16px #3b82f6; transform: scale(1.2); }
+    .timeline-item::before { content: ''; position: absolute; left: -30px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; }
     .timeline-item .date { font-size: 0.75rem; color: #71717a; margin-bottom: 2px; }
     .timeline-item .text { color: #e4e4e7; font-size: 0.9rem; }
-    .status-select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-size: 0.95rem; cursor: pointer; margin-bottom: 16px; transition: border-color 0.2s; }
-    .status-select:hover, .status-select:focus { border-color: #3b82f6; outline: none; }
-    textarea { width: 100%; min-height: 80px; padding: 12px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-family: inherit; resize: vertical; transition: border-color 0.2s; }
-    textarea:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+    .status-select, .form-input, .form-select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-size: 0.95rem; margin-bottom: 16px; }
+    .status-select:focus, .form-input:focus, .form-select:focus { outline: none; border-color: #3b82f6; }
+    textarea { width: 100%; min-height: 80px; padding: 12px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-family: inherit; resize: vertical; }
+    textarea:focus { outline: none; border-color: #3b82f6; }
     .btn { padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; font-size: 0.9rem; }
     .btn-primary { background: #3b82f6; color: #fff; }
-    .btn-primary:hover { background: #2563eb; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+    .btn-primary:hover { background: #2563eb; }
     .btn-secondary { background: #27272a; color: #e4e4e7; }
     .btn-secondary:hover { background: #3f3f46; }
     .quick-actions { display: flex; gap: 12px; margin-top: 16px; }
-    .quick-actions button { padding: 10px 16px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; }
+    .quick-actions button { padding: 10px 16px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; }
     .quick-actions button:hover { border-color: #3b82f6; color: #3b82f6; }
 
     /* Kanban */
     .kanban { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
     @media (max-width: 900px) { .kanban { grid-template-columns: repeat(2, 1fr); } }
     .kanban-col { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; min-height: 400px; }
-    .kanban-col:hover { border-color: #3f3f46; }
+    .kanban-col.drag-over { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
     .kanban-col h4 { margin: 0 0 12px 0; font-size: 0.9rem; color: #71717a; display: flex; justify-content: space-between; }
     .kanban-col h4 span { background: #27272a; padding: 2px 8px; border-radius: 6px; color: #e4e4e7; font-size: 0.8rem; }
     .kanban-card { background: #0a0a0a; border: 1px solid #27272a; border-radius: 10px; padding: 14px; margin-bottom: 10px; cursor: grab; transition: all 0.2s; }
-    .kanban-card:hover { border-color: #3b82f6; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2); transform: translateY(-1px); }
+    .kanban-card:hover { border-color: #3b82f6; }
     .kanban-card:active { cursor: grabbing; }
+    .kanban-card.dragging { opacity: 0.5; }
     .kanban-card .name { font-weight: 600; color: #fff; margin-bottom: 4px; }
     .kanban-card .meta { font-size: 0.8rem; color: #71717a; }
     .automation { margin-top: 24px; }
-    .automation h4 { margin-bottom: 12px; color: #e4e4e7; font-size: 0.95rem; }
-    .automation-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; margin-bottom: 8px; transition: all 0.2s; }
-    .automation-item:hover { border-color: #22c55e; }
+    .automation h4 { margin-bottom: 12px; color: #e4e4e7; }
+    .automation-item { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: #18181b; border: 1px solid #27272a; border-radius: 8px; margin-bottom: 8px; }
     .toggle { width: 44px; height: 24px; border-radius: 12px; background: #27272a; position: relative; cursor: pointer; transition: background 0.2s; }
     .toggle.on { background: #22c55e; }
     .toggle::after { content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; background: #fff; top: 2px; left: 2px; transition: transform 0.2s; }
@@ -117,12 +104,22 @@
 
     /* Dashboard */
     .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
-    @media (max-width: 768px) { .chart-row { grid-template-columns: 1fr; } }
-    .chart-box { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px; height: 280px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-    .chart-box:hover { border-color: #3b82f6; box-shadow: 0 0 30px rgba(59, 130, 246, 0.1); }
+    .chart-box { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px; height: 200px; display: flex; align-items: center; justify-content: center; }
     .chart-placeholder { color: #71717a; font-size: 0.9rem; }
-    .date-filter { padding: 10px 14px; border-radius: 8px; border: 1px solid #27272a; background: #18181b; color: #e4e4e7; cursor: pointer; transition: all 0.2s; }
-    .date-filter:hover { border-color: #3b82f6; }
+
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; align-items: center; justify-content: center; padding: 24px; }
+    .modal-overlay.visible { display: flex; }
+    .modal { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 24px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .modal h2 { margin: 0 0 20px 0; color: #fff; font-size: 1.25rem; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 6px; color: #a1a1aa; font-size: 0.9rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #27272a; background: #0a0a0a; color: #fff; font-size: 0.95rem; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #3b82f6; }
+    .form-group textarea { min-height: 60px; resize: vertical; }
+    .modal-actions { display: flex; gap: 12px; margin-top: 24px; }
+    .modal-actions .btn { flex: 1; }
+    .empty-state { text-align: center; padding: 48px 24px; color: #71717a; }
   </style>
 </head>
 <body>
@@ -145,153 +142,442 @@
     <!-- Screen 1: Lead Listing -->
     <section id="listing" class="screen visible">
       <div class="stats">
-        <div class="stat-card"><div class="label">Total Leads</div><div class="value">247</div></div>
-        <div class="stat-card"><div class="label">New</div><div class="value">23</div></div>
-        <div class="stat-card"><div class="label">Contacted</div><div class="value">156</div></div>
+        <div class="stat-card"><div class="label">Total Leads</div><div class="value" id="statTotal">0</div></div>
+        <div class="stat-card"><div class="label">New</div><div class="value" id="statNew">0</div></div>
+        <div class="stat-card"><div class="label">Contacted</div><div class="value" id="statContacted">0</div></div>
       </div>
       <div class="panel">
         <div class="toolbar">
-          <input type="text" class="search" placeholder="Search leads..." />
-          <div class="dropdown" id="sourceDropdown">
-            <button type="button" class="dropdown-btn">Source ▾</button>
-            <div class="dropdown-menu">
-              <span>Facebook</span><span>Google</span><span>Website</span><span>Twitter</span>
-            </div>
-          </div>
-          <div class="dropdown" id="statusDropdown">
-            <button type="button" class="dropdown-btn">Status ▾</button>
-            <div class="dropdown-menu">
-              <span>New</span><span>Contacted</span><span>Qualified</span><span>Not Interested</span>
-            </div>
-          </div>
+          <input type="text" class="search" id="searchInput" placeholder="Search leads by name or phone..." />
+          <select id="filterSource" class="form-select" style="max-width:140px;margin:0">
+            <option value="">All Sources</option>
+            <option value="Facebook">Facebook</option>
+            <option value="Google">Google</option>
+            <option value="Website">Website</option>
+            <option value="Twitter">Twitter</option>
+          </select>
+          <select id="filterStatus" class="form-select" style="max-width:160px;margin:0">
+            <option value="">All Statuses</option>
+            <option value="New">New</option>
+            <option value="Contacted">Contacted</option>
+            <option value="Qualified">Qualified</option>
+            <option value="Not Interested">Not Interested</option>
+          </select>
+          <button class="btn btn-primary" id="btnAddLead">+ Add Lead</button>
         </div>
         <table>
           <thead>
             <tr><th>Lead Name</th><th>Phone</th><th>Source</th><th>Status</th><th>Date</th><th>Actions</th></tr>
           </thead>
-          <tbody>
-            <tr class="hover"><td>Rohan Verma</td><td>+91 98765 43210</td><td>Facebook</td><td><span class="badge badge-new">New</span></td><td>16/07/2025</td><td><div class="actions"><button title="Email">✉</button><button title="Edit">✎</button><button title="Delete">🗑</button></div></td></tr>
-            <tr><td>Ananya Iyer</td><td>+91 87654 32109</td><td>Google</td><td><span class="badge badge-contacted">Contacted</span></td><td>15/07/2025</td><td><div class="actions"><button title="Email">✉</button><button title="Edit">✎</button><button title="Delete">🗑</button></div></td></tr>
-            <tr><td>Arjun Mehta</td><td>+91 76543 21098</td><td>Website</td><td><span class="badge badge-qualified">Qualified</span></td><td>14/07/2025</td><td><div class="actions"><button title="Email">✉</button><button title="Edit">✎</button><button title="Delete">🗑</button></div></td></tr>
-            <tr><td>Kavitha Reddy</td><td>+91 65432 10987</td><td>Facebook</td><td><span class="badge badge-not">Not Interested</span></td><td>13/07/2025</td><td><div class="actions"><button title="Email">✉</button><button title="Edit">✎</button><button title="Delete">🗑</button></div></td></tr>
-          </tbody>
+          <tbody id="listingBody"></tbody>
         </table>
-        <div class="pagination">
-          <button>‹</button><button class="active">1</button><button>2</button><button>3</button><button>›</button>
-          <span style="margin-left:12px;color:#71717a;font-size:0.9rem">Page 1 of 10</span>
-        </div>
+        <div class="pagination" id="pagination"></div>
       </div>
     </section>
 
     <!-- Screen 2: Lead Details -->
     <section id="details" class="screen">
-      <div class="panel" style="margin-bottom:16px"><a href="#" style="color:#3b82f6;text-decoration:none">← Back to leads</a></div>
-      <div class="detail-grid">
-        <div class="contact-card panel">
-          <h3>Rajesh Kumar</h3>
-          <p><strong>Phone:</strong> +91 98765 43210</p>
-          <p><strong>Email:</strong> rajesh@email.com</p>
-          <p><strong>Source:</strong> Facebook Ads</p>
-          <p><strong>Date:</strong> 5 Nov 2025</p>
-          <div class="quick-actions">
-            <button>📞 Call</button><button>✉ Email</button><button>WhatsApp</button>
+      <div class="panel" style="margin-bottom:16px"><a href="#" id="backToList" style="color:#3b82f6;text-decoration:none">← Back to leads</a></div>
+      <div id="detailContent">
+        <div class="detail-grid">
+          <div class="contact-card panel" id="detailContactCard"></div>
+          <div class="panel">
+            <h4 style="margin:0 0 16px 0;color:#fff">Activity</h4>
+            <div class="timeline" id="detailTimeline"></div>
           </div>
         </div>
         <div class="panel">
-          <h4 style="margin:0 0 16px 0;color:#fff">Activity</h4>
-          <div class="timeline">
-            <div class="timeline-item"><div class="date">6 Nov 2025</div><div class="text">Contacted – Initial call made</div></div>
-            <div class="timeline-item"><div class="date">7 Nov 2025</div><div class="text">Status updated to Qualified</div></div>
-            <div class="timeline-item"><div class="date">7 Nov 2025</div><div class="text">Follow-up scheduled</div></div>
+          <label style="display:block;margin-bottom:8px;color:#a1a1aa">Status</label>
+          <select class="status-select" id="detailStatus"></select>
+          <label style="display:block;margin-bottom:8px;color:#a1a1aa">Notes</label>
+          <textarea id="detailNotes" placeholder="Add notes..."></textarea>
+          <div style="display:flex;gap:12px;margin-top:16px">
+            <button class="btn btn-primary" id="btnSaveLead">Save</button>
           </div>
         </div>
       </div>
-      <div class="panel">
-        <label style="display:block;margin-bottom:8px;color:#a1a1aa">Status</label>
-        <select class="status-select">
-          <option>New</option><option>Contacted</option><option selected>Qualified</option><option>Not Interested</option>
-        </select>
-        <label style="display:block;margin-bottom:8px;color:#a1a1aa">Notes</label>
-        <textarea placeholder="Add notes..."></textarea>
-        <div style="display:flex;gap:12px;margin-top:16px">
-          <button class="btn btn-primary">Save</button>
-          <button class="btn btn-secondary">Schedule Call</button>
-        </div>
-      </div>
+      <div id="detailEmpty" class="empty-state" style="display:none">Select a lead from the listing or management screen to view details.</div>
     </section>
 
     <!-- Screen 3: Lead Management -->
     <section id="management" class="screen">
       <div class="toolbar" style="margin-bottom:20px">
-        <button class="btn btn-primary">+ Add Lead</button>
-        <div class="dropdown"><button type="button" class="dropdown-btn">Bulk Actions ▾</button><div class="dropdown-menu"><span>Assign</span><span>Export</span></div></div>
-        <div class="dropdown"><button type="button" class="dropdown-btn">Filter by source ▾</button><div class="dropdown-menu"><span>All</span><span>Facebook</span><span>Google</span><span>Website</span></div></div>
+        <button class="btn btn-primary" id="btnAddLead2">+ Add Lead</button>
       </div>
-      <div class="kanban">
-        <div class="kanban-col"><h4>New <span>12</span></h4>
-          <div class="kanban-card"><div class="name">Amit Sharma</div><div class="meta">+91 98765 11111 · Google · 8 Feb 2025</div></div>
-          <div class="kanban-card"><div class="name">Priya Nair</div><div class="meta">+91 98765 22222 · Website · 8 Feb 2025</div></div>
-        </div>
-        <div class="kanban-col"><h4>Contacted <span>8</span></h4>
-          <div class="kanban-card"><div class="name">Rajesh Kumar</div><div class="meta">+91 98765 43210 · Facebook · 6 Jan 2025</div></div>
-          <div class="kanban-card"><div class="name">Sneha Reddy</div><div class="meta">+91 98765 33333 · Google · 5 Jan 2025</div></div>
-        </div>
-        <div class="kanban-col"><h4>Qualified <span>5</span></h4>
-          <div class="kanban-card"><div class="name">Vikram Singh</div><div class="meta">+91 98765 44444 · Website · 4 Jan 2025</div></div>
-        </div>
-        <div class="kanban-col"><h4>Not Interested <span>3</span></h4>
-          <div class="kanban-card"><div class="name">Kiran Patel</div><div class="meta">+91 98765 55555 · Facebook · 3 Jan 2025</div></div>
-        </div>
-      </div>
-      <div class="automation">
-        <h4>Automation</h4>
-        <div class="automation-item"><span>Auto-assign new leads to available agents</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-        <div class="automation-item"><span>Reminder: Uncontacted leads after 24hrs</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-        <div class="automation-item"><span>Daily digest email</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
-      </div>
+      <div class="kanban" id="kanban"></div>
     </section>
 
     <!-- Screen 4: Dashboard -->
     <section id="dashboard" class="screen">
-      <div class="toolbar" style="margin-bottom:20px">
-        <select class="date-filter"><option>Last 7 days</option><option>Last 30 days</option><option selected>Last 90 days</option></select>
-      </div>
       <div class="stats">
-        <div class="stat-card"><div class="label">Total Leads</div><div class="value">1,247</div></div>
-        <div class="stat-card"><div class="label">New This Week</div><div class="value">89</div></div>
-        <div class="stat-card"><div class="label">Conversion Rate</div><div class="value">23%</div></div>
-        <div class="stat-card"><div class="label">Avg Response Time</div><div class="value">2.4 hrs</div></div>
+        <div class="stat-card"><div class="label">Total Leads</div><div class="value" id="dashTotal">0</div></div>
+        <div class="stat-card"><div class="label">New This Week</div><div class="value" id="dashNew">0</div></div>
+        <div class="stat-card"><div class="label">Conversion Rate</div><div class="value" id="dashConversion">0%</div></div>
+        <div class="stat-card"><div class="label">Qualified</div><div class="value" id="dashQualified">0</div></div>
       </div>
       <div class="chart-row">
-        <div class="chart-box"><span class="chart-placeholder">📈 Leads Over Time (line chart)</span></div>
-        <div class="chart-box"><span class="chart-placeholder">🍩 Leads by Source (donut)</span></div>
+        <div class="chart-box"><span class="chart-placeholder">📈 Leads Over Time</span></div>
+        <div class="chart-box"><span class="chart-placeholder">🍩 Leads by Source</span></div>
       </div>
       <div class="chart-row">
-        <div class="chart-box"><span class="chart-placeholder">📊 Leads by Status (bar chart)</span></div>
-        <div class="chart-box"><span class="chart-placeholder">📅 Top sources trend</span></div>
+        <div class="chart-box"><span class="chart-placeholder">📊 Leads by Status</span></div>
       </div>
     </section>
   </div>
 
+  <!-- Add/Edit Lead Modal -->
+  <div class="modal-overlay" id="leadModal">
+    <div class="modal">
+      <h2 id="modalTitle">Add Lead</h2>
+      <form id="leadForm">
+        <input type="hidden" id="leadId" />
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" id="leadName" required placeholder="e.g. Rohan Verma" />
+        </div>
+        <div class="form-group">
+          <label>Phone *</label>
+          <input type="text" id="leadPhone" required placeholder="e.g. +91 98765 43210" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="leadEmail" placeholder="e.g. rohan@email.com" />
+        </div>
+        <div class="form-group">
+          <label>Source *</label>
+          <select id="leadSource" required>
+            <option value="">Select source</option>
+            <option value="Facebook">Facebook</option>
+            <option value="Google">Google</option>
+            <option value="Website">Website</option>
+            <option value="Twitter">Twitter</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status *</label>
+          <select id="leadStatus" required>
+            <option value="New">New</option>
+            <option value="Contacted">Contacted</option>
+            <option value="Qualified">Qualified</option>
+            <option value="Not Interested">Not Interested</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="leadNotes" placeholder="Add notes about this lead..."></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="btnCancelModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Lead</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
+    const STORAGE_KEY = 'leadpulse_leads';
+    const STATUSES = ['New', 'Contacted', 'Qualified', 'Not Interested'];
+    const SOURCES = ['Facebook', 'Google', 'Website', 'Twitter'];
+
+    // Default sample data
+    const DEFAULT_LEADS = [
+      { id: '1', name: 'Rohan Verma', phone: '+91 98765 43210', email: 'rohan@email.com', source: 'Facebook', status: 'New', notes: '', activity: [], createdAt: '2025-07-16' },
+      { id: '2', name: 'Ananya Iyer', phone: '+91 87654 32109', email: 'ananya@email.com', source: 'Google', status: 'Contacted', notes: '', activity: [{ date: '15/07/2025', text: 'Initial call made' }], createdAt: '2025-07-15' },
+      { id: '3', name: 'Arjun Mehta', phone: '+91 76543 21098', email: 'arjun@email.com', source: 'Website', status: 'Qualified', notes: '', activity: [{ date: '14/07/2025', text: 'Status updated to Qualified' }], createdAt: '2025-07-14' },
+      { id: '4', name: 'Kavitha Reddy', phone: '+91 65432 10987', email: 'kavitha@email.com', source: 'Facebook', status: 'Not Interested', notes: '', activity: [], createdAt: '2025-07-13' },
+      { id: '5', name: 'Rajesh Kumar', phone: '+91 98765 43210', email: 'rajesh@email.com', source: 'Facebook', status: 'Contacted', notes: '', activity: [{ date: '6 Nov 2025', text: 'Contacted – Initial call made' }], createdAt: '2025-01-06' },
+      { id: '6', name: 'Amit Sharma', phone: '+91 98765 11111', email: 'amit@email.com', source: 'Google', status: 'New', notes: '', activity: [], createdAt: '2025-02-08' },
+    ];
+
+    function getLeads() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try {
+          return JSON.parse(stored);
+        } catch (e) { return [...DEFAULT_LEADS]; }
+      }
+      return [...DEFAULT_LEADS];
+    }
+
+    function saveLeads(leads) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
+      renderAll();
+    }
+
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    function formatDate(d) {
+      if (!d) return '';
+      const date = new Date(d);
+      return date.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    }
+
+    let selectedLeadId = null;
+    let currentPage = 1;
+    const PAGE_SIZE = 10;
+
+    function openModal(lead = null) {
+      const modal = document.getElementById('leadModal');
+      document.getElementById('modalTitle').textContent = lead ? 'Edit Lead' : 'Add Lead';
+      document.getElementById('leadId').value = lead ? lead.id : '';
+      document.getElementById('leadName').value = lead ? lead.name : '';
+      document.getElementById('leadPhone').value = lead ? lead.phone : '';
+      document.getElementById('leadEmail').value = lead ? lead.email || '' : '';
+      document.getElementById('leadSource').value = lead ? lead.source : '';
+      document.getElementById('leadStatus').value = lead ? lead.status : 'New';
+      document.getElementById('leadNotes').value = lead ? lead.notes || '' : '';
+      modal.classList.add('visible');
+    }
+
+    function closeModal() {
+      document.getElementById('leadModal').classList.remove('visible');
+    }
+
+    document.getElementById('leadForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const leads = getLeads();
+      const id = document.getElementById('leadId').value;
+      const leadData = {
+        name: document.getElementById('leadName').value.trim(),
+        phone: document.getElementById('leadPhone').value.trim(),
+        email: document.getElementById('leadEmail').value.trim(),
+        source: document.getElementById('leadSource').value,
+        status: document.getElementById('leadStatus').value,
+        notes: document.getElementById('leadNotes').value.trim(),
+      };
+
+      if (id) {
+        const idx = leads.findIndex(l => l.id === id);
+        if (idx !== -1) {
+          leads[idx] = { ...leads[idx], ...leadData };
+        }
+      } else {
+        leads.push({
+          id: generateId(),
+          ...leadData,
+          activity: [],
+          createdAt: new Date().toISOString().split('T')[0],
+        });
+      }
+      saveLeads(leads);
+      closeModal();
+    });
+
+    document.getElementById('btnCancelModal').addEventListener('click', closeModal);
+    document.getElementById('leadModal').addEventListener('click', (e) => {
+      if (e.target.id === 'leadModal') closeModal();
+    });
+
+    document.getElementById('btnAddLead').addEventListener('click', () => openModal());
+    document.getElementById('btnAddLead2').addEventListener('click', () => openModal());
+
+    function filterLeads(leads) {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const source = document.getElementById('filterSource').value;
+      const status = document.getElementById('filterStatus').value;
+      return leads.filter(l => {
+        const matchSearch = !search || l.name.toLowerCase().includes(search) || (l.phone && l.phone.includes(search));
+        const matchSource = !source || l.source === source;
+        const matchStatus = !status || l.status === status;
+        return matchSearch && matchSource && matchStatus;
+      });
+    }
+
+    function renderListing() {
+      const leads = getLeads();
+      const filtered = filterLeads(leads);
+      const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const pageLeads = filtered.slice(start, start + PAGE_SIZE);
+
+      document.getElementById('statTotal').textContent = leads.length;
+      document.getElementById('statNew').textContent = leads.filter(l => l.status === 'New').length;
+      document.getElementById('statContacted').textContent = leads.filter(l => l.status === 'Contacted').length;
+
+      const tbody = document.getElementById('listingBody');
+      tbody.innerHTML = pageLeads.map(lead => {
+        const badgeClass = `badge-${lead.status.toLowerCase().replace(' ', '-')}`;
+        return `<tr data-id="${lead.id}">
+          <td>${lead.name}</td>
+          <td>${lead.phone}</td>
+          <td>${lead.source}</td>
+          <td><span class="badge badge-${lead.status === 'Not Interested' ? 'not' : lead.status.toLowerCase()}">${lead.status}</span></td>
+          <td>${formatDate(lead.createdAt)}</td>
+          <td><div class="actions" onclick="event.stopPropagation()">
+            <button class="edit" data-id="${lead.id}" title="Edit">✎</button>
+            <button class="delete" data-id="${lead.id}" title="Delete">🗑</button>
+          </div></td>
+        </tr>`;
+      }).join('');
+
+      // Pagination
+      let pagHtml = '';
+      pagHtml += `<button ${currentPage <= 1 ? 'disabled' : ''} data-page="${currentPage - 1}">‹</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        if (totalPages > 5 && i > 1 && i < totalPages && (i < currentPage - 1 || i > currentPage + 1)) {
+          if (i === 2 || i === totalPages - 1) pagHtml += '<span style="padding:0 4px">...</span>';
+          continue;
+        }
+        pagHtml += `<button class="${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
+      }
+      pagHtml += `<button ${currentPage >= totalPages ? 'disabled' : ''} data-page="${currentPage + 1}">›</button>`;
+      pagHtml += `<span style="margin-left:12px;color:#71717a;font-size:0.9rem">Page ${currentPage} of ${totalPages} (${filtered.length} leads)</span>`;
+      document.getElementById('pagination').innerHTML = pagHtml;
+
+      document.getElementById('pagination').querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => { currentPage = parseInt(btn.dataset.page); renderListing(); });
+      });
+
+      tbody.querySelectorAll('tr').forEach(row => {
+        row.addEventListener('click', (e) => {
+          if (!e.target.closest('.actions')) { selectedLeadId = row.dataset.id; showScreen('details'); renderDetails(); }
+        });
+      });
+      tbody.querySelectorAll('.edit').forEach(btn => {
+        btn.addEventListener('click', () => { const lead = leads.find(l => l.id === btn.dataset.id); if (lead) openModal(lead); });
+      });
+      tbody.querySelectorAll('.delete').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (confirm('Delete this lead?')) {
+            saveLeads(leads.filter(l => l.id !== btn.dataset.id));
+            if (selectedLeadId === btn.dataset.id) { selectedLeadId = null; renderDetails(); }
+          }
+        });
+      });
+    }
+
+    function renderDetails() {
+      const leads = getLeads();
+      const lead = selectedLeadId ? leads.find(l => l.id === selectedLeadId) : null;
+
+      if (!lead) {
+        document.getElementById('detailContent').style.display = 'none';
+        document.getElementById('detailEmpty').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('detailContent').style.display = 'block';
+      document.getElementById('detailEmpty').style.display = 'none';
+
+      document.getElementById('detailContactCard').innerHTML = `
+        <h3>${lead.name}</h3>
+        <p><strong>Phone:</strong> ${lead.phone}</p>
+        <p><strong>Email:</strong> ${lead.email || '-'}</p>
+        <p><strong>Source:</strong> ${lead.source}</p>
+        <p><strong>Date:</strong> ${formatDate(lead.createdAt)}</p>
+        <div class="quick-actions">
+          <a href="tel:${lead.phone}" class="btn btn-secondary">📞 Call</a>
+          <a href="mailto:${lead.email}" class="btn btn-secondary">✉ Email</a>
+        </div>
+      `;
+
+      document.getElementById('detailTimeline').innerHTML = (lead.activity || []).length
+        ? lead.activity.map(a => `<div class="timeline-item"><div class="date">${a.date}</div><div class="text">${a.text}</div></div>`).join('')
+        : '<div class="timeline-item"><div class="text" style="color:#71717a">No activity yet</div></div>';
+
+      const statusSelect = document.getElementById('detailStatus');
+      statusSelect.innerHTML = STATUSES.map(s => `<option value="${s}" ${s === lead.status ? 'selected' : ''}>${s}</option>`).join('');
+      document.getElementById('detailNotes').value = lead.notes || '';
+      statusSelect.onchange = () => { lead.status = statusSelect.value; saveLeads(leads); renderDetails(); };
+      document.getElementById('detailNotes').onchange = () => { lead.notes = document.getElementById('detailNotes').value; };
+      document.getElementById('btnSaveLead').onclick = () => {
+        lead.status = statusSelect.value;
+        lead.notes = document.getElementById('detailNotes').value;
+        saveLeads(leads);
+        renderDetails();
+        alert('Saved!');
+      };
+    }
+
+    function renderKanban() {
+      const leads = getLeads();
+      const cols = STATUSES.map(status => ({ status, leads: leads.filter(l => l.status === status) }));
+
+      document.getElementById('kanban').innerHTML = cols.map(col => `
+        <div class="kanban-col" data-status="${col.status}">
+          <h4>${col.status} <span>${col.leads.length}</span></h4>
+          <div class="kanban-cards">${col.leads.map(l => `
+            <div class="kanban-card" draggable="true" data-id="${l.id}">
+              <div class="name">${l.name}</div>
+              <div class="meta">${l.phone} · ${l.source} · ${formatDate(l.createdAt)}</div>
+            </div>`).join('')}</div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.kanban-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (!card.classList.contains('dragging')) { selectedLeadId = card.dataset.id; showScreen('details'); renderDetails(); }
+        });
+        card.addEventListener('dragstart', (e) => {
+          card.classList.add('dragging');
+          e.dataTransfer.setData('text/plain', card.dataset.id);
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
+      });
+
+      document.querySelectorAll('.kanban-col').forEach(col => {
+        col.addEventListener('dragover', (e) => { e.preventDefault(); col.classList.add('drag-over'); });
+        col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+        col.addEventListener('drop', (e) => {
+          e.preventDefault();
+          col.classList.remove('drag-over');
+          const id = e.dataTransfer.getData('text/plain');
+          const newStatus = col.dataset.status;
+          const leads = getLeads();
+          const lead = leads.find(l => l.id === id);
+          if (lead && lead.status !== newStatus) {
+            lead.status = newStatus;
+            (lead.activity = lead.activity || []).push({ date: formatDate(new Date()), text: `Status updated to ${newStatus}` });
+            saveLeads(leads);
+          }
+        });
+      });
+    }
+
+    function renderDashboard() {
+      const leads = getLeads();
+      const qualified = leads.filter(l => l.status === 'Qualified').length;
+      const total = leads.length;
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      const newThisWeek = leads.filter(l => new Date(l.createdAt) >= weekAgo).length;
+
+      document.getElementById('dashTotal').textContent = total;
+      document.getElementById('dashNew').textContent = newThisWeek;
+      document.getElementById('dashConversion').textContent = total ? Math.round((qualified / total) * 100) + '%' : '0%';
+      document.getElementById('dashQualified').textContent = qualified;
+    }
+
+    function showScreen(name) {
+      document.querySelectorAll('.screen-tabs button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
+      document.querySelector(`[data-screen="${name}"]`).classList.add('active');
+      document.getElementById(name).classList.add('visible');
+    }
+
+    function renderAll() {
+      renderListing();
+      renderDetails();
+      renderKanban();
+      renderDashboard();
+    }
+
     document.querySelectorAll('.screen-tabs button').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.screen-tabs button').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('visible'));
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.screen).classList.add('visible');
+        showScreen(btn.dataset.screen);
+        renderAll();
       });
     });
-    document.querySelectorAll('.dropdown').forEach(el => {
-      el.querySelector('button').addEventListener('click', () => el.classList.toggle('open'));
-    });
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.dropdown')) document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open'));
-    });
-    document.querySelectorAll('tbody tr').forEach(row => {
-      row.addEventListener('mouseenter', () => { document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('hover')); row.classList.add('hover'); });
-      row.addEventListener('mouseleave', () => row.classList.remove('hover'));
-    });
+    document.getElementById('backToList').addEventListener('click', (e) => { e.preventDefault(); showScreen('listing'); renderAll(); });
+    document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; renderListing(); });
+    document.getElementById('filterSource').addEventListener('change', () => { currentPage = 1; renderListing(); });
+    document.getElementById('filterStatus').addEventListener('change', () => { currentPage = 1; renderListing(); });
+
+    // Initial load
+    renderAll();
   </script>
 </body>
 </html>
